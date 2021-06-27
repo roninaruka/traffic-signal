@@ -6,17 +6,23 @@ function Signal(props) {
     const [totalTime, setTotalTime] = React.useState(170);
     React.useEffect(() => {
         const timer = setInterval(() => {
-            if (totalTime <= props.max && totalTime >= props.min) {
-                setTime(time - 1);
-                time <= 6 ? setColor("yellow") : setColor("green");
-            } else {
-                setTime(props.time);
-                setColor("red");
-            }
             if (totalTime === 0) {
                 setTotalTime(170);
-                setTime(170 - props.time);
+                setTime(props.time);
             } else {
+                if (totalTime <= props.max && totalTime >= props.min) {
+                    setTime(time - 1);
+                    time <= 6 ? setColor("yellow") : setColor("green");
+                } else {
+                    Math.abs(totalTime - props.max) > 1
+                        ? setTime(
+                              totalTime - props.max < 0
+                                  ? 170 - Math.abs(totalTime - props.max)
+                                  : totalTime - props.max
+                          )
+                        : setTime(props.time);
+                    setColor("red");
+                }
                 setTotalTime(totalTime - 1);
             }
         }, 1000);
